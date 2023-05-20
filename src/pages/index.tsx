@@ -1,7 +1,7 @@
 import { type NextPage } from "next";
 import Head from "next/head";
 
-import { SignIn, UserButton, useUser } from "@clerk/nextjs";
+import { UserButton, useUser } from "@clerk/nextjs";
 import { api } from "~/utils/api";
 
 const Home: NextPage = () => {
@@ -22,13 +22,8 @@ const Home: NextPage = () => {
       </Head>
       <main className="flex h-screen justify-center">
         <div className="h-full w-full border-x border-slate-400 md:max-w-2xl">
-          <div className="flex border-b border-slate-400 p-4">
-            {!user.isSignedIn && (
-              <div className="flex justify-center">
-                <SignIn path="/sign-in" routing="path" signUpUrl="/sign-up" />
-              </div>
-            )}
-            {user.isSignedIn && <UserButton />}
+          <div className="flex border-b border-slate-400  p-4">
+            <UserButton afterSignOutUrl="/sign-in" />
           </div>
           <div className="flex flex-col">
             {[...data, ...data]?.map((post) => (
