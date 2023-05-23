@@ -2,18 +2,29 @@ import { type NextPage } from "next";
 import Head from "next/head";
 
 import { UserButton, useUser } from "@clerk/nextjs";
-import { api } from "~/utils/api";
-import { type RouterOutputs } from "~/utils/api";
+import { api, type RouterOutputs } from "~/utils/api";
 
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import Image from "next/image";
+import { useState } from "react";
 import { LoadingPage } from "~/components/loading";
 
 dayjs.extend(relativeTime);
 
 const CreatePostWizard = () => {
   const { user } = useUser();
+
+  const [input, setInput] = useState("");
+
+  const ctx = api.useContext();
+
+  const { mutate, isLoading: isPosting } = api.posts.create.useMutation({
+    onSuccess: () => {
+      setInput("");
+      void ctx.posts.getAll.invalidate();
+    },
+  });
 
   if (!user) return null;
 
@@ -22,7 +33,15 @@ const CreatePostWizard = () => {
       <div className="flex h-12 w-12 items-center justify-center">
         <UserButton />
       </div>
-      <input placeholder="😎" className="grow bg-transparent outline-none" />
+      <input
+        placeholder="😎"
+        className="grow bg-transparent outline-none"
+        type="text"
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+        disabled={isPosting}
+      />
+      <button onClick={() => mutate({ content: input })}>Submit</button>
     </div>
   );
 };
@@ -60,7 +79,7 @@ const Feed = () => {
 
   return (
     <div className="flex flex-col">
-      {[...data, ...data]?.map((fullPost) => (
+      {[...data]?.map((fullPost) => (
         <PostView {...fullPost} key={fullPost.post.id} />
       ))}
     </div>
