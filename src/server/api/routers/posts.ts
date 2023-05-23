@@ -1,4 +1,4 @@
-import { User } from "@clerk/backend/dist/types/api";
+import { type User } from "@clerk/backend/dist/types/api";
 import { clerkClient } from "@clerk/nextjs";
 import { TRPCError } from "@trpc/server";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
