@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-.root {
-    @apply bg-rose-50 text-slate-100;
+.main {
+  @apply bg-rose-50 text-slate-100;
+  @apply text-fuchsia-600;
 }
