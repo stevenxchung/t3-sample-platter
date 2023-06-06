@@ -1,7 +1,7 @@
 import { type NextPage } from "next";
 
 import { UserButton, useUser } from "@clerk/nextjs";
-import { api } from "~/utils/api";
+import { api, getBaseUrl } from "~/utils/api";
 
 import { useState } from "react";
 import { toast } from "react-hot-toast";
@@ -37,6 +37,7 @@ const CreatePostWizard = () => {
   return (
     <div className="flex w-full gap-4">
       <UserButton
+        afterSignOutUrl={`${getBaseUrl()}/sign-in`}
         appearance={{
           elements: {
             userButtonAvatarBox: {
