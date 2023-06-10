@@ -1,5 +1,5 @@
 import { clerkClient } from "@clerk/nextjs";
-import { type Post } from "@prisma/client";
+import { type TwitterLitePost } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
@@ -18,7 +18,7 @@ const ratelimit = new Ratelimit({
   analytics: true,
 });
 
-const addUserDataToPosts = async (posts: Post[]) => {
+const addUserDataToPosts = async (posts: TwitterLitePost[]) => {
   const userId = posts.map((post) => post.authorId);
   const users = (
     await clerkClient.users.getUserList({
@@ -61,7 +61,7 @@ export const postsRouter = createTRPCRouter({
   getById: publicProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ ctx, input }) => {
-      const post = await ctx.prisma.post.findUnique({
+      const post = await ctx.prisma.twitterLitePost.findUnique({
         where: { id: input.id },
       });
 
@@ -71,7 +71,7 @@ export const postsRouter = createTRPCRouter({
     }),
 
   getAll: publicProcedure.query(async ({ ctx }) => {
-    const posts = await ctx.prisma.post.findMany({
+    const posts = await ctx.prisma.twitterLitePost.findMany({
       take: 100,
       orderBy: [{ createdAt: "desc" }],
     });
@@ -82,7 +82,7 @@ export const postsRouter = createTRPCRouter({
   getPostsByUserId: publicProcedure
     .input(z.object({ userId: z.string() }))
     .query(({ ctx, input }) =>
-      ctx.prisma.post
+      ctx.prisma.twitterLitePost
         .findMany({
           where: {
             authorId: input.userId,
@@ -106,7 +106,7 @@ export const postsRouter = createTRPCRouter({
       const { success } = await ratelimit.limit(authorId);
       if (!success) throw new TRPCError({ code: "TOO_MANY_REQUESTS" });
 
-      const post = await ctx.prisma.post.create({
+      const post = await ctx.prisma.twitterLitePost.create({
         data: {
           authorId,
           content: input.content,
