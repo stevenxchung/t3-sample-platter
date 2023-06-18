@@ -27,7 +27,9 @@ const CreatePostWizard = () => {
       if (errorMessage && errorMessage[0]) {
         toast.error(errorMessage[0]);
       } else {
-        toast.error("Failed to create post! Please try again later.");
+        toast.error(
+          "Failed to create post! Create post is rate limited. Please try again later."
+        );
       }
     },
   });
