@@ -99,7 +99,6 @@ export const postsRouter = createTRPCRouter({
         content: z.string().emoji("Only emojis are allowed!").min(1).max(280),
       })
     )
-
     .mutation(async ({ ctx, input }) => {
       const authorId = ctx.userId;
 
