@@ -16,9 +16,6 @@ const MyApp: AppType = ({ Component, pageProps }) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Toaster position="bottom-center" />
-      <div className="flex justify-center">
-        <div className="h-36 w-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 md:max-w-2xl"></div>
-      </div>
       <Component {...pageProps} />
     </ClerkProvider>
   );
