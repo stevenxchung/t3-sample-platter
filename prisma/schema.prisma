@@ -3,19 +3,18 @@
 
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["jsonProtocol"]
+  previewFeatures = ["driverAdapters"]
 }
 
 datasource db {
-  provider     = "mysql"
-  url          = env("DATABASE_URL")
-  relationMode = "prisma"
+  provider = "sqlite"
+  url      = "file:./dev.db"
 }
 
 model TwitterLitePost {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
-  content   String   @db.VarChar(255)
+  content   String
   authorId  String
 
   @@index([authorId])
