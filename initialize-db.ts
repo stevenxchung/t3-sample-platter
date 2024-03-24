@@ -7,17 +7,25 @@ const client = createClient({
   authToken: `${process.env.DATABASE_TOKEN ?? ""}`,
 });
 
-// void client.execute(`
-//   DROP TABLE TwitterLitePost;
-// `);
+const initializeDB = async () => {
+  // await client.execute(`
+  //   DROP TABLE TwitterLitePost;
+  // `);
 
-void client.execute(`
-  CREATE TABLE TwitterLitePost (
-    id TEXT UNIQUE,
-    createdAt DATETIME,
-    content TEXT,
-    authorId TEXT PRIMARY KEY
+  await client.execute(`
+    CREATE TABLE TwitterLitePost (
+      id PRIMARY KEY,
+      createdAt DATETIME,
+      content TEXT,
+      authorId TEXT
+    );
+  `);
+
+  await client.execute(
+    `CREATE INDEX idx_author_id ON TwitterLitePost (authorId);`
   );
-`);
+};
+
+void initializeDB();
 
 console.log("Database table(s) created!");
